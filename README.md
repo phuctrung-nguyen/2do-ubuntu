@@ -2,21 +2,23 @@
   <img src="daily_todo/resources/robotics-mark.svg" width="72" height="72" alt="Daily To-do robotics logo">
 </p>
 
-<h1 align="center">Daily To-do</h1>
+<h1 align="center">2DO · Daily To-do</h1>
 
 <p align="center">
   A calendar and daily task list for your Ubuntu desktop.<br>
   Robotics-inspired design · English and Vietnamese · Local storage
 </p>
 
-Plan your day, organize upcoming tasks, and track completed work in a desktop panel with a graphite, cyan, and mint color palette. Daily To-do stores your tasks locally and works without an account.
+Plan your day, organize upcoming tasks, and track completed work in a desktop panel with a graphite, cyan, and mint color palette. Daily To-do stores your tasks locally and works without an account. The application launcher is named **2DO**.
+
+This README describes the current source version. Start with [Installation](#installation), then see [Usage](#usage), [Data and backups](#data-and-backups), or [Troubleshooting](#troubleshooting).
 
 ## Features
 
 - Monthly calendar with a separate task list for each day.
 - A read-only Tomorrow column beside Daily Tasks previews the next day's tasks, time ranges, and completion progress.
 - Weekly recurring tasks with start/end times and independent completion for each date.
-- Add, delete, and complete tasks. Calendar days show completion percentages with a bottom-up color fill: 50% fills half the cell, and 100% fills it completely. Days without tasks show a dash.
+- Add, edit, delete, and complete tasks. Calendar days show completion percentages with a bottom-up color fill: 50% fills half the cell, and 100% fills it completely. Days without tasks show a dash.
 - Completion progress and task previews when hovering over calendar days.
 - Calendar completion levels animate smoothly over 450 ms, with subtle hover transitions on controls. Water animation follows GTK's system animation setting.
 - Partially completed days have two gentle animated waves, and fully completed days show a check mark. Completing a task briefly highlights its row and fades its text. Motion effects follow GTK's animation setting; wave updates pause when the calendar is not mapped.
@@ -119,7 +121,8 @@ Run the installer as your normal user, **without sudo**. If you move or rename t
 | `/usr/bin/python3 setup.py` | Install the application launcher |
 | `/usr/bin/python3 setup.py --autostart` | Install the launcher and enable login startup |
 | `/usr/bin/python3 setup.py --corner` | Install the launcher and GNOME integration |
-| `/usr/bin/python3 setup.py --autostart --corner` | Install all of the above |
+| `/usr/bin/python3 setup.py --autostart --corner` | Install the launcher, login startup, and GNOME integration |
+| `/usr/bin/python3 setup.py --autostart --corner --desktop-shortcut` | Also create a desktop shortcut |
 
 ## Usage
 
@@ -152,7 +155,8 @@ Restart the app after changing source files or styles.
 | Colors, fonts, borders, and spacing | [style.css](daily_todo/resources/style.css) |
 | Robotics icon | [robotics-mark.svg](daily_todo/resources/robotics-mark.svg) |
 | Interface text | `TEXT` in [i18n.py](daily_todo/i18n.py) |
-| Window size | `self.window.set_default_size(1300, 650)` in [app.py](daily_todo/app.py) |
+| Saved window size and position | **Layout → Save layout** in the app |
+| Default window size and position fallback | `saved_size()` and `resolve_position()` in [positioning.py](daily_todo/positioning.py) |
 | Calendar and task layout | `build_window()` in [app.py](daily_todo/app.py) |
 | Time zone | `HANOI = ZoneInfo(...)` in [app.py](daily_todo/app.py) |
 | Monitor positioning | [positioning.py](daily_todo/positioning.py) |
@@ -192,6 +196,8 @@ After editing the GNOME extension, rerun `/usr/bin/python3 setup.py --corner`, t
 | Daily tasks | `~/.local/share/daily-todo/tasks.json` |
 | Recurring schedules | `~/.local/share/daily-todo/routines.json` |
 | Saved panel position and size | `~/.config/daily-todo/position.json` |
+| Installed launcher icon | `~/.local/share/icons/hicolor/scalable/apps/local.daily.todo.svg` |
+| Optional desktop shortcut | `daily-todo.desktop` in the folder reported by `xdg-user-dir DESKTOP` |
 | Language preference | `~/.config/daily-todo/settings.json` |
 | Color preference | `~/.config/daily-todo/theme.json` |
 | Background opacity | `~/.config/daily-todo/appearance.json` |
@@ -201,9 +207,20 @@ After editing the GNOME extension, rerun `/usr/bin/python3 setup.py --corner`, t
 
 If `XDG_DATA_HOME` or `XDG_CONFIG_HOME` is set, the app uses those directories instead of the corresponding defaults.
 
-Tasks are saved when you add, delete, or complete them. Text still in the input field is not saved until you press Enter or click Add.
+Tasks are saved when you add, edit, delete, or complete them. Text still in the input field is not saved until you press Enter or click Add.
 
-To back up or move your data, close the app and copy the `daily-todo` data and configuration directories to a safe location. On another computer, install the source and dependencies, then restore the files to the corresponding directories.
+To back up or move your data, close the app and copy the `daily-todo` data and configuration directories to a safe location. For example, this creates a timestamped backup using your configured XDG paths:
+
+```bash
+backup_dir="$HOME/daily-todo-backup-$(date +%Y%m%d-%H%M%S)"
+mkdir -p "$backup_dir/data" "$backup_dir/config"
+cp -a "${XDG_DATA_HOME:-$HOME/.local/share}/daily-todo" "$backup_dir/data/"
+cp -a "${XDG_CONFIG_HOME:-$HOME/.config}/daily-todo" "$backup_dir/config/"
+```
+
+Run the app at least once before backing up; a directory may not exist until its data or settings have been saved. Only copy directories that exist.
+
+On another computer, install the source and dependencies, then restore the files to the corresponding directories.
 
 ## Updating
 
@@ -256,7 +273,7 @@ Disable the GNOME integration with:
 gnome-extensions disable daily-todo-desktop@local
 ```
 
-Then remove the application launcher, autostart entry, and extension directory listed in the data table. You can also delete the source folder.
+Then remove the application launcher, installed launcher icon, optional desktop shortcut, autostart entry, and extension directory listed in the data table. You can also delete the source folder.
 
 Task data and preferences remain available for backup or reinstallation. Remove their directories separately if you want to delete your personal data.
 
@@ -269,8 +286,12 @@ Task data and preferences remain available for backup or reinstallation. Remove 
 │   ├── __main__.py               # Package entry point
 │   ├── app.py                    # Interface and task management
 │   ├── i18n.py                   # English and Vietnamese translations
-│   ├── positioning.py            # Monitor coordinates and work areas
+│   ├── positioning.py            # Monitor coordinates, work areas, and saved size
+│   ├── routines.py               # Weekly schedules and daily occurrences
+│   ├── themes.py                 # Color palettes and background opacity
+│   ├── visuals.py                # Animated calendar progress
 │   └── resources/
+│       ├── calendar.svg          # Application launcher icon
 │       ├── style.css
 │       └── robotics-mark.svg
 ├── integrations/
@@ -296,8 +317,8 @@ Run the unit tests without interacting with the desktop:
 
 Run these integration checks separately in a suitable desktop environment:
 
-- `/usr/bin/python3 tests/gui_input_smoke.py` opens a test window, uses real mouse and keyboard input, and restores the pointer position afterward.
-- `/usr/bin/python3 tests/gnome_stack_smoke.py` creates a separate headless GNOME session to check window stacking. It requires GNOME Shell, D-Bus, and a compatible graphics environment.
+- `/usr/bin/python3 tests/gui_input_smoke.py` opens a test window, uses real mouse and keyboard input, and restores the pointer position afterward. It requires an X11/XWayland display and the `libX11` and `libXtst` libraries.
+- `/usr/bin/python3 tests/gnome_stack_smoke.py` creates a separate headless GNOME session to check window stacking. It requires GNOME Shell 46, D-Bus, and a compatible graphics environment.
 
 These checks use separate temporary data. They cover input behavior and sample-window stacking, and do not replace testing on real desktop configurations.
 
@@ -307,7 +328,7 @@ These checks use separate temporary data. They cover input behavior and sample-w
 - Editing a recurring task in Daily Tasks changes only that date; use **Recurring tasks** to update the repeating schedule.
 - Unfinished tasks do not automatically move to the next day.
 - When viewing another date, the app keeps that date selected; click **Go to today** to return.
-- Time zone and window size are configured in source rather than a settings screen.
+- Time zone is configured in source. Window position and size can be changed and saved through **Layout**.
 - The GNOME extension currently targets Shell 46; other versions need compatibility testing.
 - **Show Desktop / Super+D** behavior can depend on GNOME and other extensions and has not been confirmed across all configurations.
 
