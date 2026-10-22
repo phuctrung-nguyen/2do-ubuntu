@@ -9,6 +9,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from .positioning import valid_position, resolve_position
+from .themes import THEMES, load_theme, save_theme, theme_css
 from .i18n import (
     MONTHS,
     SHORT_DAYS,
@@ -38,6 +39,7 @@ def hanoi_now():
 DATA = Path(os.environ.get('XDG_DATA_HOME', str(Path.home() / '.local/share'))) / 'daily-todo/tasks.json'
 POSITION = Path(os.environ.get('XDG_CONFIG_HOME', str(Path.home() / '.config'))) / 'daily-todo/position.json'
 SETTINGS = POSITION.with_name('settings.json')
+THEME = POSITION.with_name('theme.json')
 
 
 class Todo(Gtk.Application):
@@ -50,6 +52,7 @@ class Todo(Gtk.Application):
         self.month = self.current_date.replace(day=1)
         self.moving = False
         self.language = load_language(SETTINGS)
+        self.theme = load_theme(THEME)
         self.position_hint_key = 'pinned'
         self.translated_widgets = []
         self.desktop_mode = False
@@ -125,9 +128,9 @@ class Todo(Gtk.Application):
         self.window.set_keep_above(False)
         self.window.set_keep_below(False)
         self.window.connect('configure-event', self.enforce_position)
-        provider = Gtk.CssProvider()
-        provider.load_from_path(str(RESOURCES / 'style.css'))
-        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        self.css_provider = Gtk.CssProvider()
+        self.apply_theme()
+        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), self.css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14, margin=20)
         self.window.add(box)
         header = Gtk.Box(spacing=12)
@@ -232,6 +235,10 @@ class Todo(Gtk.Application):
         entry_row.pack_start(add, False, False, 0)
         sidebar.pack_start(entry_row, False, False, 0)
         footer = Gtk.Box(spacing=12)
+        self.theme_button = Gtk.ComboBoxText()
+        self.refresh_theme_options()
+        self.theme_button.connect('changed', self.change_theme)
+        footer.pack_start(self.theme_button, False, False, 0)
         footer.pack_start(self.position_hint, True, True, 0)
         keyboard_hint = Gtk.Label(xalign=1)
         keyboard_hint.get_style_context().add_class('muted')
@@ -251,6 +258,30 @@ class Todo(Gtk.Application):
 
     def tr(self, key, **values):
         return translate(self.language, key, **values)
+
+    def apply_theme(self):
+        css = (RESOURCES / 'style.css').read_text()
+        self.css_provider.load_from_data(theme_css(css, self.theme).encode())
+
+    def refresh_theme_options(self):
+        self.theme_button.remove_all()
+        for theme in THEMES:
+            self.theme_button.append(theme, self.tr('theme_' + theme))
+        self.theme_button.set_active_id(self.theme)
+        self.theme_button.set_tooltip_text(self.tr('theme_tip'))
+
+    def change_theme(self, combo):
+        theme = combo.get_active_id()
+        if theme is None or theme == self.theme:
+            return
+        try:
+            save_theme(THEME, theme)
+        except OSError as exc:
+            combo.set_active_id(self.theme)
+            self.position_hint.set_text(self.tr('theme_error', error=exc))
+            return
+        self.theme = theme
+        self.apply_theme()
 
     def refresh_desktop_status(self):
         self.desktop_status.set_text(self.tr('desktop_badge_ready' if self.desktop_mode else 'desktop_badge_pending'))
@@ -275,6 +306,7 @@ class Todo(Gtk.Application):
         self.pin_button.set_label(self.tr('pin' if self.moving else 'move'))
         self.position_hint.set_text(self.tr(self.position_hint_key))
         self.language_button.set_tooltip_text(self.tr('language_tip'))
+        self.refresh_theme_options()
         self.refresh_desktop_status()
         self.entry.set_placeholder_text(self.tr('placeholder'))
         for widget, setter, key in self.translated_widgets:

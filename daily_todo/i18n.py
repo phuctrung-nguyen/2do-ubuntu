@@ -3,6 +3,9 @@ import json
 
 TEXT = {
     'vi': {
+        'theme_tip': 'Chọn màu giao diện', 'theme_error': 'Chưa lưu được màu: {error}',
+        'theme_cyan': 'Cyan', 'theme_mint': 'Xanh mint', 'theme_blue': 'Xanh dương',
+        'theme_purple': 'Tím', 'theme_rose': 'Hồng', 'theme_amber': 'Vàng hổ phách',
         'title': 'Việc mỗi ngày', 'move': 'Di chuyển', 'pin': 'Ghim tại đây',
         'close': 'Đóng ứng dụng', 'pinned': 'Đã ghim · Nhấn Di chuyển để chọn vị trí khác',
         'moving': 'Kéo vùng tên ứng dụng đến vị trí bạn thích, rồi nhấn Ghim tại đây.',
@@ -21,13 +24,16 @@ TEXT = {
         'save_error': 'Không lưu được công việc',
         'desktop_ready': 'Chế độ desktop · Luôn nằm sau cửa sổ ứng dụng',
         'desktop_pending': 'Chưa có tích hợp desktop · Đăng xuất/đăng nhập sau khi cài phần ghim GNOME',
-        'eyebrow': 'ROBOTICS / KẾ HOẠCH MỖI NGÀY',
+        'eyebrow': 'HUSTER / KẾ HOẠCH MỖI NGÀY',
         'task_heading': 'VIỆC TRONG NGÀY', 'total': 'Tổng việc', 'remaining': 'Còn lại', 'completed': 'Đã xong',
         'keyboard_hint': 'Enter ↵ để thêm việc',
         'desktop_badge_ready': '● Ghim desktop', 'desktop_badge_pending': '○ Chưa ghim desktop',
     },
     'en': {
-        'title': 'Daily to-do', 'move': 'Move', 'pin': 'Pin here',
+        'theme_tip': 'Choose interface colors', 'theme_error': 'Could not save theme: {error}',
+        'theme_cyan': 'Cyan', 'theme_mint': 'Mint', 'theme_blue': 'Blue',
+        'theme_purple': 'Purple', 'theme_rose': 'Rose', 'theme_amber': 'Amber',
+        'title': 'DAILY TO-DO', 'move': 'Move', 'pin': 'Pin here',
         'close': 'Close app', 'pinned': 'Pinned · Click Move to choose another position',
         'moving': 'Drag the app title to your preferred position, then click Pin here.',
         'position_saved': 'Position saved · Restored the next time you sign in',
@@ -45,7 +51,7 @@ TEXT = {
         'save_error': 'Could not save tasks',
         'desktop_ready': 'Desktop mode · Always behind application windows',
         'desktop_pending': 'Desktop integration unavailable · Sign out/in after installing the GNOME extension',
-        'eyebrow': 'ROBOTICS / DAILY PLANNER',
+        'eyebrow': 'HUSTER / DAILY PLANNER',
         'task_heading': 'DAILY TASKS', 'total': 'Total', 'remaining': 'To do', 'completed': 'Done',
         'keyboard_hint': 'Enter ↵ to add a task',
         'desktop_badge_ready': '● Desktop pinned', 'desktop_badge_pending': '○ Desktop not pinned',

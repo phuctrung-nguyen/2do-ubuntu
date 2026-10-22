@@ -17,6 +17,7 @@ Plan your day, organize upcoming tasks, and track completed work in a desktop pa
 - Add, delete, and complete tasks, with remaining-task counts on the calendar.
 - Completion progress and task previews when hovering over calendar days.
 - Switch between English and Vietnamese; your language preference is saved.
+- Choose Cyan, Mint, Blue, Purple, Rose, or Amber from the color selector in the footer. Colors update immediately and your choice is saved.
 - Live clock using Hanoi time (UTC+7).
 - When viewing today, automatically follow the new date after midnight or waking the computer.
 - Move the panel and save its position with **Move → drag the app title → Pin here**.
@@ -180,6 +181,7 @@ After editing the GNOME extension, rerun `/usr/bin/python3 setup.py --corner`, t
 | Daily tasks | `~/.local/share/daily-todo/tasks.json` |
 | Saved panel position | `~/.config/daily-todo/position.json` |
 | Language preference | `~/.config/daily-todo/settings.json` |
+| Color preference | `~/.config/daily-todo/theme.json` |
 | Login startup entry | `~/.config/autostart/daily-todo.desktop` |
 | Application launcher | `~/.local/share/applications/daily-todo.desktop` |
 | GNOME extension | `~/.local/share/gnome-shell/extensions/daily-todo-desktop@local/` |
