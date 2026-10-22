@@ -1,165 +1,154 @@
 <p align="center">
-  <img src="daily_todo/resources/robotics-mark.svg" width="72" height="72" alt="Robotics planner logo">
+  <img src="daily_todo/resources/robotics-mark.svg" width="72" height="72" alt="Daily To-do robotics logo">
 </p>
 
-<h1 align="center">Daily To-do · Việc mỗi ngày</h1>
+<h1 align="center">Daily To-do</h1>
 
 <p align="center">
-  Lịch và danh sách công việc ngay trên desktop Ubuntu.<br>
-  Giao diện lấy cảm hứng từ robotics · Tiếng Việt / English · Lưu dữ liệu trên máy
+  A calendar and daily task list for your Ubuntu desktop.<br>
+  Robotics-inspired design · English and Vietnamese · Local storage
 </p>
 
-Một bảng kế hoạch cá nhân để bạn xem hôm nay cần làm gì, ghi việc cho những ngày sắp tới và đánh dấu công việc đã hoàn thành. Tông graphite, cyan và xanh mint tạo cảm giác như một bảng điều khiển trong phòng lab, đồng thời giữ thao tác đơn giản.
+Plan your day, organize upcoming tasks, and track completed work in a desktop panel with a graphite, cyan, and mint color palette. Daily To-do stores your tasks locally and works without an account.
 
-## Tính năng
+## Features
 
-- Lịch tháng: chọn ngày để xem, thêm, xóa và đánh dấu hoàn thành công việc.
-- Mỗi ngày có danh sách riêng; ô lịch hiển thị số việc còn lại.
-- Thanh tiến độ hoàn thành và xem nhanh công việc khi di chuột lên ngày.
-- Chuyển **VI / EN** ngay trong giao diện; nhớ lựa chọn sau khi mở lại.
-- Đồng hồ cập nhật mỗi giây theo **giờ Hà Nội (UTC+7)**.
-- Khi đang xem hôm nay, danh sách tự chuyển ngày qua nửa đêm hoặc sau khi máy thức dậy.
-- **Di chuyển → kéo vùng tên ứng dụng → Ghim tại đây** để lưu vị trí.
-- Tự mở sau khi đăng nhập Ubuntu nếu bật autostart.
-- Tích hợp GNOME giữ bảng sau các cửa sổ ứng dụng, trên bề mặt desktop để vẫn nhận chuột.
-- Ẩn cửa sổ khỏi dock và Alt+Tab.
-- Lưu bằng JSON trên máy; không yêu cầu tài khoản, không có đồng bộ đám mây.
+- Monthly calendar with a separate task list for each day.
+- Add, delete, and complete tasks, with remaining-task counts on the calendar.
+- Completion progress and task previews when hovering over calendar days.
+- Switch between English and Vietnamese; your language preference is saved.
+- Live clock using Hanoi time (UTC+7).
+- When viewing today, automatically follow the new date after midnight or waking the computer.
+- Move the panel and save its position with **Move → drag the app title → Pin here**.
+- Optional automatic startup after signing in.
+- Bundled GNOME extension keeps the panel behind application windows while allowing mouse input on the desktop.
+- Hidden from the dock and Alt+Tab.
+- Local JSON storage with no cloud synchronization.
 
-## Yêu cầu và phạm vi hỗ trợ
+## Requirements
 
-| Thành phần | Yêu cầu |
+| Component | Requirement |
 | --- | --- |
-| Môi trường mục tiêu | Ubuntu Desktop 24.04, GNOME Shell 46 |
-| Python | Python hệ thống; mã nguồn dùng Python 3.9 trở lên |
-| Giao diện | GTK 3, PyGObject |
-| Phiên Wayland | Cần XWayland và biến môi trường `DISPLAY` |
-| Ghim desktop | Phần mở rộng GNOME đi kèm, hiện khai báo hỗ trợ Shell 46 |
-| Kích thước mặc định | 980 × 650; cần vùng màn hình đủ lớn ở mức scale đang dùng |
+| Target desktop | Ubuntu Desktop 24.04 with GNOME Shell 46 |
+| Python | System Python 3.9 or later |
+| Interface | GTK 3 and PyGObject |
+| Wayland sessions | XWayland and an available `DISPLAY` environment variable |
+| Desktop integration | Bundled extension, currently declaring support for GNOME Shell 46 |
+| Panel size | Fixed 980 × 650; requires enough screen space at your display scale |
 
-Ứng dụng đã được kiểm tra trên môi trường Ubuntu/GNOME 46. Các phiên bản GNOME khác, KDE, Xfce, Windows và macOS chưa được xác nhận hỗ trợ. Nếu phần tích hợp GNOME chưa hoạt động, giao diện có thể chạy như cửa sổ thường nhưng **chưa có hành vi ghim desktop đầy đủ**.
+Other GNOME versions, desktop environments, Windows, and macOS are not confirmed supported. Without the GNOME extension, the interface can run as a regular window, but full desktop pinning is unavailable.
 
-Đây là ứng dụng chạy từ mã nguồn; chưa có gói cài đặt `.deb` hoặc AppImage.
+The app runs from source. There is currently no `.deb` or AppImage package.
 
-## Cài đặt
+## Installation
 
-### 1. Tải mã nguồn
+### 1. Download the source
 
-Trên trang GitHub của dự án, chọn **Code → Download ZIP**, giải nén và mở Terminal trong thư mục chứa `app.py`.
+```bash
+git clone https://github.com/phuctrung-nguyen/2tolist-ubuntu.git
+cd 2tolist-ubuntu
+```
 
-Hoặc sao chép **HTTPS clone URL** tại nút Code rồi chạy:
+Alternatively, select **Code → Download ZIP** on GitHub, extract it, and open a terminal in the folder containing `app.py`.
 
-~~~bash
-git clone <HTTPS-URL-CUA-REPOSITORY> daily-todo
-cd daily-todo
-~~~
+Keep the source in a permanent location. The desktop launcher stores its absolute path.
 
-Thay `<HTTPS-URL-CUA-REPOSITORY>` bằng URL thật của repository, không nhập nguyên phần trong dấu ngoặc.
+### 2. Install system dependencies
 
-Nên đặt mã nguồn ở một thư mục cố định, ví dụ `~/Applications/daily-todo`.
+On Ubuntu:
 
-### 2. Cài thư viện hệ thống
-
-Trên Ubuntu:
-
-~~~bash
+```bash
 sudo apt update
 sudo apt install python3 python3-gi python3-gi-cairo gir1.2-gtk-3.0 xwayland tzdata
-~~~
+```
 
-Kiểm tra GTK:
+Check that GTK is available:
 
-~~~bash
+```bash
 /usr/bin/python3 -c "import gi; gi.require_version('Gtk', '3.0'); from gi.repository import Gtk; print('GTK', Gtk.MAJOR_VERSION)"
-~~~
+```
 
-Dùng **`/usr/bin/python3`** trong các lệnh bên dưới. Python trong Conda hoặc virtualenv có thể không nhìn thấy PyGObject được cài qua apt. Không cần chạy `pip install` hay tạo virtualenv cho cách cài này.
+Use **`/usr/bin/python3`** for the commands below. Conda or virtual environment interpreters may not find the PyGObject packages installed through apt. This installation method does not require `pip install` or a virtual environment.
 
-### 3. Chạy thử
+### 3. Run the app
 
-Tại thư mục dự án:
+From the project directory:
 
-~~~bash
+```bash
 /usr/bin/python3 app.py
-~~~
+```
 
-Bạn cũng có thể chạy dưới dạng Python package từ thư mục gốc:
+You can also run it as a Python package:
 
-~~~bash
+```bash
 /usr/bin/python3 -m daily_todo
-~~~
+```
 
-Đến đây, bạn có thể thử thêm công việc, đổi ngôn ngữ và chọn vị trí. Để bảng luôn nằm sau các ứng dụng khác, tiếp tục cài tích hợp desktop ở bước 4.
+Select **EN · English** at the top of the panel to switch the interface to English.
 
-### 4. Bật ghim desktop và tự khởi động
+### 4. Enable desktop integration and automatic startup
 
-Kiểm tra phiên bản GNOME:
+Check your GNOME version:
 
-~~~bash
+```bash
 gnome-shell --version
-~~~
+```
 
-Với **GNOME Shell 46**, chạy:
+For **GNOME Shell 46**, run:
 
-~~~bash
+```bash
 /usr/bin/python3 setup.py --autostart --corner
-~~~
+```
 
-Sau đó **lưu công việc đang mở, đăng xuất rồi đăng nhập lại một lần**. GNOME cần phiên đăng nhập mới để nạp extension vừa cài.
+Save any open work, then **sign out and sign back in once** so GNOME can load the newly installed extension.
 
-Lệnh này:
+The installer creates an application launcher named **Việc mỗi ngày**, enables startup after signing in, and installs the `daily-todo-desktop@local` extension. It also removes the older `daily-todo-corner@local` extension from the enabled list if present.
 
-- Tạo mục **Việc mỗi ngày** trong danh sách ứng dụng.
-- Tạo cấu hình tự mở khi đăng nhập cho tài khoản hiện tại.
-- Cài và bật extension `daily-todo-desktop@local`.
-- Tắt cấu hình phần ghim `daily-todo-corner@local` cũ của dự án nếu có.
+Run the installer as your normal user, **without sudo**. If you move or rename the source folder, run setup again from its new location.
 
-**Không chạy `setup.py` bằng sudo.** Script cài cho người dùng hiện tại và lưu đường dẫn tuyệt đối đến mã nguồn. Nếu đổi tên hoặc di chuyển thư mục dự án, chạy lại lệnh cài từ vị trí mới.
-
-Các cách cài khác:
-
-| Lệnh | Tác dụng |
+| Command | Result |
 | --- | --- |
-| `/usr/bin/python3 setup.py` | Chỉ tạo mục trong danh sách ứng dụng |
-| `/usr/bin/python3 setup.py --autostart` | Tạo mục ứng dụng và tự mở khi đăng nhập |
-| `/usr/bin/python3 setup.py --corner` | Tạo mục ứng dụng và cài tích hợp GNOME |
-| `/usr/bin/python3 setup.py --autostart --corner` | Cài đầy đủ |
+| `/usr/bin/python3 setup.py` | Install the application launcher |
+| `/usr/bin/python3 setup.py --autostart` | Install the launcher and enable login startup |
+| `/usr/bin/python3 setup.py --corner` | Install the launcher and GNOME integration |
+| `/usr/bin/python3 setup.py --autostart --corner` | Install all of the above |
 
-## Sử dụng
+## Usage
 
-| Bạn muốn làm gì? | Thao tác |
+| Action | How to do it |
 | --- | --- |
-| Ghi việc cho một ngày | Chọn ngày trên lịch, nhập nội dung rồi nhấn **Enter** hoặc **Thêm / Add** |
-| Đánh dấu hoàn thành | Bấm ô chọn cạnh công việc |
-| Xóa công việc | Bấm biểu tượng thùng rác của dòng đó |
-| Xem tháng khác | Dùng nút **‹ / ›** |
-| Quay về ngày hiện tại | Bấm **Về hôm nay / Go to today** |
-| Đổi ngôn ngữ | Chọn **VI · Tiếng Việt / EN · English** ở đầu bảng |
-| Chọn vị trí đặt bảng | Bấm **Di chuyển / Move**, kéo vùng tên ứng dụng rồi bấm **Ghim tại đây / Pin here** |
-| Đóng bảng | Bấm **×**; dữ liệu đã thêm vẫn được giữ |
-| Mở lại sau khi đóng | Tìm **Việc mỗi ngày** trong danh sách ứng dụng hoặc chạy `/usr/bin/python3 app.py` |
+| Add a task | Select a date, enter a task, then press **Enter** or click **Add** |
+| Complete a task | Click its checkbox |
+| Delete a task | Click the trash icon beside it |
+| Browse months | Use **‹ / ›** |
+| Return to the current date | Click **Go to today** |
+| Change the interface language | Select **EN · English** or the Vietnamese option in the language selector |
+| Save the panel position | Click **Move**, drag the app title, then click **Pin here** |
+| Close the app | Click **×**; saved tasks remain on disk |
+| Reopen the app | Find **Việc mỗi ngày** in the application list or run `/usr/bin/python3 app.py` |
 
-Khi phần tích hợp hoạt động, nhãn trạng thái hiển thị **Ghim desktop / Desktop pinned**. Bảng ở trên mọi workspace, phía sau các cửa sổ ứng dụng. Hãy quay về vùng desktop đang trống để tương tác; ứng dụng khác vẫn che bảng ở phần màn hình mà chúng chiếm.
+When integration is active, the status badge reads **Desktop pinned**. The panel appears across workspaces behind application windows. Interact with it through an uncovered area of the desktop.
 
-Autostart có nghĩa là **sau khi đăng nhập tài khoản**, không phải trước màn hình đăng nhập. Nếu bạn chủ động đóng bảng, nó không tự mở lại ngay; hãy mở bằng launcher hoặc chờ lần đăng nhập tiếp theo.
+Automatic startup runs after you sign in to your desktop session. Closing the panel does not immediately reopen it; use the launcher or wait until your next sign-in.
 
-## Tùy chỉnh cho riêng bạn
+## Customization
 
-Đóng rồi mở lại ứng dụng sau khi sửa mã nguồn hoặc CSS.
+Restart the app after changing source files or styles.
 
-| Muốn thay đổi | Vị trí chỉnh sửa |
+| Setting | File or location |
 | --- | --- |
-| Màu nền, màu nhấn, chữ, viền, khoảng cách | [style.css](daily_todo/resources/style.css) |
-| Biểu tượng cánh tay robot trong giao diện | [daily_todo/resources/robotics-mark.svg](daily_todo/resources/robotics-mark.svg) |
-| Câu chữ tiếng Việt / tiếng Anh | Từ điển `TEXT` trong [i18n.py](daily_todo/i18n.py) |
-| Kích thước cửa sổ | `self.window.set_default_size(980, 650)` trong [app.py](daily_todo/app.py) |
-| Bố cục lịch và danh sách | Hàm `build_window()` trong [app.py](daily_todo/app.py) |
-| Múi giờ | `HANOI = ZoneInfo(...)` trong [app.py](daily_todo/app.py) |
-| Cách giới hạn vị trí theo màn hình | [positioning.py](daily_todo/positioning.py) |
-| Cơ chế giữ bảng sau các ứng dụng | [integrations/gnome-shell/extension.js](integrations/gnome-shell/extension.js) |
+| Colors, fonts, borders, and spacing | [style.css](daily_todo/resources/style.css) |
+| Robotics icon | [robotics-mark.svg](daily_todo/resources/robotics-mark.svg) |
+| Interface text | `TEXT` in [i18n.py](daily_todo/i18n.py) |
+| Window size | `self.window.set_default_size(980, 650)` in [app.py](daily_todo/app.py) |
+| Calendar and task layout | `build_window()` in [app.py](daily_todo/app.py) |
+| Time zone | `HANOI = ZoneInfo(...)` in [app.py](daily_todo/app.py) |
+| Monitor positioning | [positioning.py](daily_todo/positioning.py) |
+| Desktop window stacking | [extension.js](integrations/gnome-shell/extension.js) |
 
-Ví dụ đổi màu nút thêm và ô ngày đang chọn trong `daily_todo/resources/style.css`:
+For example, change the Add button and selected date colors in `daily_todo/resources/style.css`:
 
-~~~css
+```css
 button.primary {
     background-color: #91dfbf;
     border-color: #91dfbf;
@@ -170,172 +159,149 @@ button.day.selected {
     background-color: #203b34;
     border-color: #91dfbf;
 }
-~~~
+```
 
-Đây là **GTK CSS**, không phải CSS trình duyệt; chỉ sử dụng thuộc tính GTK hỗ trợ.
+The app uses GTK CSS, which supports a different set of properties from browser CSS.
 
-Để dùng múi giờ khác, ví dụ:
+To use another time zone, change the `HANOI` constant, for example:
 
-~~~python
+```python
 HANOI = ZoneInfo('Asia/Tokyo')
-~~~
+```
 
-Đồng thời sửa giá trị `timezone` ở cả hai ngôn ngữ trong `daily_todo/i18n.py` để nhãn đồng hồ hiển thị đúng. Thay đổi này áp dụng cho lịch và đồng hồ; công việc cũ vẫn giữ ngày đã lưu, không tự chuyển đổi sang múi giờ mới.
+Also update the `timezone` label in both languages in `daily_todo/i18n.py`. The new zone affects the clock and calendar; existing tasks keep their saved dates.
 
-Nếu sửa extension, chạy lại `setup.py --corner` rồi đăng xuất/đăng nhập để nạp mã mới. Chỉ đổi `shell-version` trong metadata không bảo đảm tương thích với phiên bản GNOME khác.
+After editing the GNOME extension, rerun `/usr/bin/python3 setup.py --corner`, then sign out and back in. Changing only `shell-version` in the extension metadata does not establish compatibility with another GNOME release.
 
-## Dữ liệu và sao lưu
+## Data and backups
 
-Các đường dẫn mặc định:
-
-| Nội dung | Tệp |
+| Content | Default location |
 | --- | --- |
-| Công việc theo ngày | `~/.local/share/daily-todo/tasks.json` |
-| Vị trí đã ghim | `~/.config/daily-todo/position.json` |
-| Ngôn ngữ | `~/.config/daily-todo/settings.json` |
-| Tự khởi động | `~/.config/autostart/daily-todo.desktop` |
-| Launcher | `~/.local/share/applications/daily-todo.desktop` |
-| Extension | `~/.local/share/gnome-shell/extensions/daily-todo-desktop@local/` |
+| Daily tasks | `~/.local/share/daily-todo/tasks.json` |
+| Saved panel position | `~/.config/daily-todo/position.json` |
+| Language preference | `~/.config/daily-todo/settings.json` |
+| Login startup entry | `~/.config/autostart/daily-todo.desktop` |
+| Application launcher | `~/.local/share/applications/daily-todo.desktop` |
+| GNOME extension | `~/.local/share/gnome-shell/extensions/daily-todo-desktop@local/` |
 
-Nếu đặt `XDG_DATA_HOME` hoặc `XDG_CONFIG_HOME`, ứng dụng dùng các thư mục tương ứng thay cho đường dẫn mặc định.
+If `XDG_DATA_HOME` or `XDG_CONFIG_HOME` is set, the app uses those directories instead of the corresponding defaults.
 
-Để sao lưu hoặc chuyển máy: đóng ứng dụng, sao chép các thư mục `daily-todo` chứa dữ liệu và cấu hình sang nơi an toàn. Trên máy mới, cài mã nguồn và thư viện rồi khôi phục các tệp vào vị trí tương ứng.
+Tasks are saved when you add, delete, or complete them. Text still in the input field is not saved until you press Enter or click Add.
 
-Công việc được tự lưu khi thêm, xóa hoặc đánh dấu hoàn thành. Nội dung còn đang gõ trong ô nhập chưa được lưu cho đến khi nhấn Enter/Thêm.
+To back up or move your data, close the app and copy the `daily-todo` data and configuration directories to a safe location. On another computer, install the source and dependencies, then restore the files to the corresponding directories.
 
-## Cập nhật
+## Updating
 
-1. Đóng ứng dụng.
-2. Nếu dùng Git, chạy `git pull` trong thư mục dự án; nếu dùng ZIP, cập nhật các tệp mã nguồn.
-3. Chạy lại `/usr/bin/python3 setup.py --autostart --corner` nếu bạn dùng cài đặt đầy đủ.
-4. Nếu extension thay đổi, đăng xuất/đăng nhập một lần.
+1. Close the app.
+2. Run `git pull` in the project directory, or replace the source files if you downloaded a ZIP.
+3. Rerun `/usr/bin/python3 setup.py --autostart --corner` if you use the full installation.
+4. Sign out and back in if the extension changed.
 
-Dữ liệu cá nhân được lưu ngoài thư mục mã nguồn. Giữ lại các chỉnh sửa cá nhân trong CSS/mã nguồn trước khi cập nhật để tránh ghi đè chúng.
+Personal data is stored outside the source folder. Save any custom source or CSS changes before updating.
 
-## Xử lý sự cố
+## Troubleshooting
 
-**Lỗi `No module named gi` hoặc không tìm thấy GTK**
+### Python cannot import `gi`, or GTK is missing
 
-Cài thư viện ở bước 2 và dùng `/usr/bin/python3` thay cho Python của Conda/virtualenv.
+Install the system dependencies above and run the app with `/usr/bin/python3`. A Conda or virtual environment interpreter may not see apt-installed packages.
 
-**Bảng chưa ghim desktop hoặc vẫn hiện như cửa sổ thường**
+### The panel is not pinned to the desktop
 
-Kiểm tra GNOME 46, chạy lại `setup.py --autostart --corner`, rồi đăng xuất/đăng nhập. Nếu đã tắt toàn bộ extension người dùng, bật lại trong ứng dụng **Extensions**.
+Check that you are using GNOME Shell 46, rerun setup with `--autostart --corner`, and sign out and back in. If user extensions are globally disabled, enable them in the **Extensions** app.
 
-~~~bash
+Inspect the extension with:
+
+```bash
 gnome-extensions info daily-todo-desktop@local
-~~~
+```
 
-**Không thấy bảng trong dock/Alt+Tab**
+### The app does not appear in the dock or Alt+Tab
 
-Đây là hành vi chủ đích. Quay về desktop hoặc tìm **Việc mỗi ngày** trong danh sách ứng dụng. Trong chế độ desktop, mở launcher không ép bảng đè lên ứng dụng đang làm việc.
+This is intentional. Return to the desktop or find **Việc mỗi ngày** in the application list. In desktop mode, launching the app again does not bring the panel above your other applications.
 
-**Bảng có vẻ không nhận chuột**
+### The panel does not respond to mouse input
 
-Trước hết bảo đảm không có cửa sổ khác đang che vùng bảng. Không tự bật **Always on Top** hoặc **Always on Bottom**; phần tích hợp GNOME cần giữ bảng trên bề mặt desktop nhưng sau ứng dụng. Nếu lỗi vẫn xảy ra, ghi lại phiên bản GNOME và trạng thái extension khi báo lỗi.
+Check whether another window covers it. Avoid manually enabling **Always on Top** or **Always on Bottom**, because the GNOME integration manages its stacking position. If the problem persists, include your GNOME version and extension status in a bug report.
 
-**Bảng quá lớn hoặc bị cắt**
+### The panel is too large or clipped
 
-Kích thước mặc định cố định là 980 × 650. Thử giảm mức scale hoặc chỉnh kích thước/bố cục trong `daily_todo/app.py` cho phù hợp màn hình.
+The default size is fixed at 980 × 650. Reduce display scaling or adjust the size and layout in `daily_todo/app.py` to fit your screen.
 
-**Không tự mở khi bật máy**
+### The app does not start automatically
 
-Kiểm tra tệp autostart và đường dẫn đến mã nguồn. Nếu đã di chuyển thư mục dự án, chạy lại script cài đặt. Ứng dụng chỉ tự mở khi bạn đăng nhập vào phiên desktop.
+Check the autostart file and its source path. If you moved the project folder, rerun setup. Startup happens after signing in to a desktop session.
 
-## Tắt tự khởi động và gỡ cài đặt
+## Disabling startup and uninstalling
 
-Đóng ứng dụng trước. Để chỉ tắt autostart, xóa tệp `daily-todo.desktop` trong thư mục autostart của tài khoản.
+Close the app first. To disable automatic startup, remove `daily-todo.desktop` from your account's autostart directory listed above.
 
-Để gỡ tích hợp GNOME:
+Disable the GNOME integration with:
 
-~~~bash
+```bash
 gnome-extensions disable daily-todo-desktop@local
-~~~
+```
 
-Sau đó xóa launcher, tệp autostart và thư mục extension theo bảng đường dẫn ở trên. Bạn có thể xóa thư mục mã nguồn khi không còn sử dụng.
+Then remove the application launcher, autostart entry, and extension directory listed in the data table. You can also delete the source folder.
 
-Dữ liệu công việc và cấu hình cá nhân không tự bị xóa. Giữ chúng để cài lại hoặc sao lưu; chỉ xóa riêng nếu bạn muốn bỏ toàn bộ dữ liệu.
+Task data and preferences remain available for backup or reinstallation. Remove their directories separately if you want to delete your personal data.
 
-## Cấu trúc dự án và kiểm tra
+## Project structure
 
-~~~text
+```text
 .
-├── daily_todo/                   # Mã nguồn ứng dụng
+├── daily_todo/
 │   ├── __init__.py
-│   ├── __main__.py               # python3 -m daily_todo
-│   ├── app.py                    # Giao diện và thao tác công việc
-│   ├── i18n.py                   # Tiếng Việt / English
-│   ├── positioning.py            # Tọa độ và vùng làm việc
+│   ├── __main__.py               # Package entry point
+│   ├── app.py                    # Interface and task management
+│   ├── i18n.py                   # English and Vietnamese translations
+│   ├── positioning.py            # Monitor coordinates and work areas
 │   └── resources/
-│       ├── style.css             # Giao diện robotics
+│       ├── style.css
 │       └── robotics-mark.svg
 ├── integrations/
-│   └── gnome-shell/              # Phần tích hợp desktop GNOME
+│   └── gnome-shell/
 │       ├── extension.js
 │       └── metadata.json
 ├── scripts/
-│   └── install.py                # Cài launcher, autostart và extension
-├── tests/                        # Unit test và kiểm tra giao diện
-├── app.py                        # Giữ tương thích với launcher cũ
-├── setup.py                      # Giữ tương thích với lệnh cài cũ
+│   └── install.py                # Launcher, startup, and extension installer
+├── tests/                        # Unit tests and desktop smoke tests
+├── app.py                        # Compatibility entry point
+├── setup.py                      # Compatibility installer entry point
 ├── .gitignore
 └── README.md
-~~~
+```
 
-Kiểm tra logic không cần thao tác desktop:
+## Development checks
 
-~~~bash
+Run the unit tests without interacting with the desktop:
+
+```bash
 /usr/bin/python3 -m unittest discover -s tests
-~~~
+```
 
-Hai bài thử tích hợp cần chạy riêng khi phát triển:
+Run these integration checks separately in a suitable desktop environment:
 
-- `/usr/bin/python3 tests/gui_input_smoke.py`: mở cửa sổ thử, dùng chuột và bàn phím thật, khôi phục vị trí con trỏ sau khi kết thúc.
-- `/usr/bin/python3 tests/gnome_stack_smoke.py`: tạo phiên GNOME headless riêng để kiểm tra xếp lớp cửa sổ; cần GNOME Shell, D-Bus và môi trường đồ họa tương thích.
+- `/usr/bin/python3 tests/gui_input_smoke.py` opens a test window, uses real mouse and keyboard input, and restores the pointer position afterward.
+- `/usr/bin/python3 tests/gnome_stack_smoke.py` creates a separate headless GNOME session to check window stacking. It requires GNOME Shell, D-Bus, and a compatible graphics environment.
 
-Các bài thử này dùng dữ liệu tạm riêng. Bài thử GUI kiểm tra thao tác nhập liệu; bài thử GNOME kiểm tra thứ tự cửa sổ bằng các cửa sổ mẫu. Chúng không thay thế hoàn toàn việc kiểm tra trên từng cấu hình desktop thực tế.
+These checks use separate temporary data. They cover input behavior and sample-window stacking, and do not replace testing on real desktop configurations.
 
-## Giới hạn hiện tại
+## Current limitations
 
-- Chưa có nhắc việc, công việc lặp lại, đồng bộ giữa máy hoặc kéo thả công việc giữa các ngày.
-- Chưa có sửa trực tiếp nội dung công việc đã tạo; có thể xóa và thêm lại.
-- Việc chưa hoàn thành không tự chuyển sang ngày hôm sau.
-- Khi đang xem một ngày khác, ứng dụng giữ ngày đó; nhấn **Về hôm nay** để quay lại.
-- Múi giờ và kích thước được tùy chỉnh trong mã nguồn, chưa có trang cài đặt riêng.
-- Extension hiện nhắm GNOME 46; cần kiểm thử thêm trước khi hỗ trợ phiên bản khác.
-- Hành vi của phím **Hiện màn hình nền / Super+D** có thể phụ thuộc GNOME và các extension khác; chưa được xác nhận trên mọi cấu hình.
+- No reminders, recurring tasks, cloud sync, or dragging tasks between dates.
+- Existing task text cannot be edited directly; delete and recreate the task instead.
+- Unfinished tasks do not automatically move to the next day.
+- When viewing another date, the app keeps that date selected; click **Go to today** to return.
+- Time zone and window size are configured in source rather than a settings screen.
+- The GNOME extension currently targets Shell 46; other versions need compatibility testing.
+- **Show Desktop / Super+D** behavior can depend on GNOME and other extensions and has not been confirmed across all configurations.
 
-## Đóng góp
+## Contributing
 
-Bạn có thể mở Issue để báo lỗi hoặc đề xuất tính năng. Khi báo lỗi, hãy ghi phiên bản Ubuntu/GNOME, loại phiên X11/Wayland, các bước tái hiện và thông báo trong Terminal nếu có. Không gửi tệp công việc cá nhân khi không cần thiết.
+Open an issue to report a bug or suggest a feature. Include your Ubuntu and GNOME versions, session type (X11 or Wayland), reproduction steps, and any terminal errors. Avoid attaching personal task data unless necessary.
 
-Nếu gửi Pull Request, mô tả thay đổi và cách bạn đã kiểm tra. Các sửa đổi giao diện nên được kiểm tra ở cả tiếng Việt và tiếng Anh.
+For pull requests, describe the change and how you verified it. Check interface changes in both English and Vietnamese.
 
-Dự án hiện chưa có tệp `LICENSE`. Chủ repository có thể bổ sung giấy phép phù hợp trước khi công bố điều kiện sử dụng, sửa đổi và phân phối mã nguồn.
+## License
 
-## English quick start
-
-A robotics-inspired desktop planner for Ubuntu GNOME 46, with Vietnamese/English UI, local JSON storage and a Hanoi clock.
-
-1. Download this repository as ZIP or clone its HTTPS URL.
-2. Open a terminal in the project directory.
-3. Install the system dependencies and run:
-
-~~~bash
-sudo apt update
-sudo apt install python3 python3-gi python3-gi-cairo gir1.2-gtk-3.0 xwayland tzdata
-
-/usr/bin/python3 app.py
-~~~
-
-For desktop integration and automatic startup after signing in:
-
-~~~bash
-/usr/bin/python3 setup.py --autostart --corner
-~~~
-
-**Sign out and back in once** to load the GNOME extension. Do not run the setup script with sudo. Keep the source folder in place, or rerun setup after moving it.
-
-Select **EN · English** in the app. Use **Move → drag the title → Pin here** to save its location. In desktop mode, the planner stays behind application windows and is hidden from the dock/Alt+Tab.
-
-Customize `daily_todo/resources/style.css` for colors and fonts, `daily_todo/i18n.py` for UI text, and `daily_todo/app.py` for layout, window size and time zone. Tasks live under `~/.local/share/daily-todo/`; preferences live under `~/.config/daily-todo/`. Other GNOME versions and desktop environments are not yet confirmed supported.
+This repository does not currently include a `LICENSE` file. The repository owner can add one to specify terms for using, modifying, and distributing the source.
