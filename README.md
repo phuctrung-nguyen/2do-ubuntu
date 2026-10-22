@@ -53,8 +53,8 @@ The app runs from source. There is currently no `.deb` or AppImage package.
 ### 1. Download the source
 
 ```bash
-git clone https://github.com/phuctrung-nguyen/2tolist-ubuntu.git
-cd 2tolist-ubuntu
+git clone https://github.com/phuctrung-nguyen/2do-ubuntu.git
+cd 2do-ubuntu
 ```
 
 Alternatively, select **Code → Download ZIP** on GitHub, extract it, and open a terminal in the folder containing `app.py`.
