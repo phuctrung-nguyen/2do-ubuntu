@@ -14,13 +14,18 @@ Plan your day, organize upcoming tasks, and track completed work in a desktop pa
 ## Features
 
 - Monthly calendar with a separate task list for each day.
-- Add, delete, and complete tasks, with remaining-task counts on the calendar.
+- A read-only Tomorrow column beside Daily Tasks previews the next day's tasks, time ranges, and completion progress.
+- Weekly recurring tasks with start/end times and independent completion for each date.
+- Add, delete, and complete tasks. Calendar days show completion percentages with a bottom-up color fill: 50% fills half the cell, and 100% fills it completely. Days without tasks show a dash.
 - Completion progress and task previews when hovering over calendar days.
+- Calendar completion levels animate smoothly over 450 ms, with subtle hover transitions on controls. Water animation follows GTK's system animation setting.
+- Partially completed days have two gentle animated waves, and fully completed days show a check mark. Completing a task briefly highlights its row and fades its text. Motion effects follow GTK's animation setting; wave updates pause when the calendar is not mapped.
 - Switch between English and Vietnamese; your language preference is saved.
 - Choose Cyan, Mint, Blue, Purple, Rose, or Amber from the color selector in the footer. Colors update immediately and your choice is saved.
+- Adjust **Background** in the footer from 0 (transparent surfaces) to 100 (solid surfaces). The default is 35; text and controls remain opaque. Transparency requires desktop compositing and an RGBA visual.
 - Live clock using Hanoi time (UTC+7).
 - When viewing today, automatically follow the new date after midnight or waking the computer.
-- Move the panel and save its position with **Move → drag the app title → Pin here**.
+- Move the panel and save its position with **Layout → drag the app title or resize → Save layout**.
 - Optional automatic startup after signing in.
 - Bundled GNOME extension keeps the panel behind application windows while allowing mouse input on the desktop.
 - Hidden from the dock and Alt+Tab.
@@ -35,7 +40,7 @@ Plan your day, organize upcoming tasks, and track completed work in a desktop pa
 | Interface | GTK 3 and PyGObject |
 | Wayland sessions | XWayland and an available `DISPLAY` environment variable |
 | Desktop integration | Bundled extension, currently declaring support for GNOME Shell 46 |
-| Panel size | Fixed 980 × 650; requires enough screen space at your display scale |
+| Panel size | Default 1300 × 650; adjustable through Layout, with scrolling for smaller windows |
 
 Other GNOME versions, desktop environments, Windows, and macOS are not confirmed supported. Without the GNOME extension, the interface can run as a regular window, but full desktop pinning is unavailable.
 
@@ -103,7 +108,9 @@ For **GNOME Shell 46**, run:
 
 Save any open work, then **sign out and sign back in once** so GNOME can load the newly installed extension.
 
-The installer creates an application launcher named **Việc mỗi ngày**, enables startup after signing in, and installs the `daily-todo-desktop@local` extension. It also removes the older `daily-todo-corner@local` extension from the enabled list if present.
+To also place a clickable calendar icon on your desktop, run `/usr/bin/python3 setup.py --autostart --corner --desktop-shortcut`. The launcher is named **2DO** and uses a bundled calendar icon. If Ubuntu asks, right-click the desktop shortcut and select **Allow Launching**. The app opens automatically after signing in and restores its saved layout. Clicking the launcher reuses the running app or starts it if closed. Desktop integration keeps it behind other application windows.
+
+The installer creates an application launcher named **2DO**, enables startup after signing in, and installs the `daily-todo-desktop@local` extension. It also removes the older `daily-todo-corner@local` extension from the enabled list if present.
 
 Run the installer as your normal user, **without sudo**. If you move or rename the source folder, run setup again from its new location.
 
@@ -121,16 +128,20 @@ Run the installer as your normal user, **without sudo**. If you move or rename t
 | Add a task | Select a date, enter a task, then press **Enter** or click **Add** |
 | Complete a task | Click its checkbox |
 | Delete a task | Click the trash icon beside it |
+| Edit a task | Double-click its text, change it, then press Enter or click **Save**. **Cancel** keeps the original text. |
 | Browse months | Use **‹ / ›** |
 | Return to the current date | Click **Go to today** |
 | Change the interface language | Select **EN · English** or the Vietnamese option in the language selector |
-| Save the panel position | Click **Move**, drag the app title, then click **Pin here** |
+| Set up a fixed weekly schedule | Click **Recurring tasks**, enter a name and a 24-hour time range, select weekdays, then click **Save schedule** |
+| Move or resize the panel | Click **Layout**, drag the title to move, adjust **Width/Height** or drag **↘**, then click **Save layout** |
 | Close the app | Click **×**; saved tasks remain on disk |
-| Reopen the app | Find **Việc mỗi ngày** in the application list or run `/usr/bin/python3 app.py` |
+| Reopen the app | Find **2DO** in the application list or run `/usr/bin/python3 app.py` |
 
 When integration is active, the status badge reads **Desktop pinned**. The panel appears across workspaces behind application windows. Interact with it through an uncovered area of the desktop.
 
 Automatic startup runs after you sign in to your desktop session. Closing the panel does not immediately reopen it; use the launcher or wait until your next sign-in.
+
+Recurring schedules start on the day you create them and follow the app's Hanoi time zone. Their tasks appear automatically on matching dates, sorted by start time. Completing or deleting an occurrence affects that date only. Use **Edit** in the schedule dialog to change a schedule, or its trash button to stop repeating it. Previously saved daily records remain unchanged. Time ranges must end later on the same day; overnight ranges and notifications are not supported.
 
 ## Customization
 
@@ -141,7 +152,7 @@ Restart the app after changing source files or styles.
 | Colors, fonts, borders, and spacing | [style.css](daily_todo/resources/style.css) |
 | Robotics icon | [robotics-mark.svg](daily_todo/resources/robotics-mark.svg) |
 | Interface text | `TEXT` in [i18n.py](daily_todo/i18n.py) |
-| Window size | `self.window.set_default_size(980, 650)` in [app.py](daily_todo/app.py) |
+| Window size | `self.window.set_default_size(1300, 650)` in [app.py](daily_todo/app.py) |
 | Calendar and task layout | `build_window()` in [app.py](daily_todo/app.py) |
 | Time zone | `HANOI = ZoneInfo(...)` in [app.py](daily_todo/app.py) |
 | Monitor positioning | [positioning.py](daily_todo/positioning.py) |
@@ -179,11 +190,13 @@ After editing the GNOME extension, rerun `/usr/bin/python3 setup.py --corner`, t
 | Content | Default location |
 | --- | --- |
 | Daily tasks | `~/.local/share/daily-todo/tasks.json` |
-| Saved panel position | `~/.config/daily-todo/position.json` |
+| Recurring schedules | `~/.local/share/daily-todo/routines.json` |
+| Saved panel position and size | `~/.config/daily-todo/position.json` |
 | Language preference | `~/.config/daily-todo/settings.json` |
 | Color preference | `~/.config/daily-todo/theme.json` |
+| Background opacity | `~/.config/daily-todo/appearance.json` |
 | Login startup entry | `~/.config/autostart/daily-todo.desktop` |
-| Application launcher | `~/.local/share/applications/daily-todo.desktop` |
+| Application launcher | `~/.local/share/applications/local.daily.todo.desktop` |
 | GNOME extension | `~/.local/share/gnome-shell/extensions/daily-todo-desktop@local/` |
 
 If `XDG_DATA_HOME` or `XDG_CONFIG_HOME` is set, the app uses those directories instead of the corresponding defaults.
@@ -219,7 +232,7 @@ gnome-extensions info daily-todo-desktop@local
 
 ### The app does not appear in the dock or Alt+Tab
 
-This is intentional. Return to the desktop or find **Việc mỗi ngày** in the application list. In desktop mode, launching the app again does not bring the panel above your other applications.
+This is intentional. Return to the desktop or find **2DO** in the application list. In desktop mode, launching the app again does not bring the panel above your other applications.
 
 ### The panel does not respond to mouse input
 
@@ -227,7 +240,7 @@ Check whether another window covers it. Avoid manually enabling **Always on Top*
 
 ### The panel is too large or clipped
 
-The default size is fixed at 980 × 650. Reduce display scaling or adjust the size and layout in `daily_todo/app.py` to fit your screen.
+The default size is 1300 × 650. Click **Layout** to change the window dimensions (minimum 640 × 420), then **Save layout** to remember its size and position. Smaller windows provide scrolling to keep all three columns accessible.
 
 ### The app does not start automatically
 
@@ -290,8 +303,8 @@ These checks use separate temporary data. They cover input behavior and sample-w
 
 ## Current limitations
 
-- No reminders, recurring tasks, cloud sync, or dragging tasks between dates.
-- Existing task text cannot be edited directly; delete and recreate the task instead.
+- No notifications, cloud sync, or dragging tasks between dates.
+- Editing a recurring task in Daily Tasks changes only that date; use **Recurring tasks** to update the repeating schedule.
 - Unfinished tasks do not automatically move to the next day.
 - When viewing another date, the app keeps that date selected; click **Go to today** to return.
 - Time zone and window size are configured in source rather than a settings screen.

@@ -3,6 +3,7 @@
 import argparse
 import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -26,17 +27,23 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--autostart', action='store_true', help='Tự chạy khi đăng nhập')
     parser.add_argument('--corner', action='store_true', help='Cài tích hợp desktop GNOME 46')
+    parser.add_argument('--desktop-shortcut', action='store_true', help='Tạo biểu tượng lịch trên desktop')
     args = parser.parse_args()
     app = ROOT / 'app.py'
+    data = Path(os.environ.get('XDG_DATA_HOME', str(Path.home() / '.local/share')))
+    icon = data / 'icons/hicolor/scalable/apps/local.daily.todo.svg'
+    icon.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(ROOT / 'daily_todo/resources/calendar.svg', icon)
     desktop = '\n'.join([
-        '[Desktop Entry]', 'Type=Application', 'Name=Việc mỗi ngày',
-        'Comment=Ghi chú công việc theo ngày',
+        '[Desktop Entry]', 'Type=Application', 'Name=2DO',
+        'Comment=Daily calendar, tasks and recurring schedules',
+        'Keywords=calendar;planner;tasks;todo;',
         f'Exec={quote(sys.executable)} {quote(app)}',
-        'Icon=view-task', 'Terminal=false', 'Categories=Office;',
+        f'Icon={icon}', 'Terminal=false', 'Categories=Office;Calendar;',
+        'StartupNotify=false', 'StartupWMClass=local.daily.todo',
         'X-GNOME-Autostart-enabled=true', '',
     ])
-    data = Path(os.environ.get('XDG_DATA_HOME', str(Path.home() / '.local/share')))
-    targets = [data / 'applications/daily-todo.desktop']
+    targets = [data / 'applications/local.daily.todo.desktop']
     if args.autostart:
         config = Path(os.environ.get('XDG_CONFIG_HOME', str(Path.home() / '.config')))
         targets.append(config / 'autostart/daily-todo.desktop')
@@ -44,6 +51,23 @@ def main():
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(desktop)
         print(f'Đã tạo: {target}')
+    legacy = data / 'applications/daily-todo.desktop'
+    if legacy.exists() and str(app) in legacy.read_text():
+        legacy.unlink()
+    if args.desktop_shortcut:
+        result = subprocess.run(['xdg-user-dir', 'DESKTOP'], check=True, capture_output=True, text=True)
+        directory = Path(result.stdout.strip())
+        if not directory.is_absolute() or directory == Path.home():
+            raise RuntimeError('Desktop folder is not configured; launcher and autostart were installed.')
+        directory.mkdir(parents=True, exist_ok=True)
+        shortcut = directory / 'daily-todo.desktop'
+        shortcut.write_text(desktop)
+        shortcut.chmod(0o755)
+        trusted = subprocess.run(['gio', 'set', str(shortcut), 'metadata::trusted', 'true'],
+                                 capture_output=True, text=True)
+        print(f'Đã tạo biểu tượng lịch: {shortcut}')
+        if trusted.returncode:
+            print('Nếu cần, bấm chuột phải biểu tượng trên desktop → Allow Launching.')
     if args.corner:
         import gi
         from gi.repository import Gio

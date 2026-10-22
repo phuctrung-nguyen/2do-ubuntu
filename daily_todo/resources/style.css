@@ -26,6 +26,12 @@ button.day.today { border-color: #79d9b9; }
 button.day.today .day-number { color: #95edd0; }
 button.day.selected { background: #1a3c49; border-color: #65d4e4; }
 button.day.selected .day-number, button.day.selected .day-summary { color: #b3f1f5; }
+button.day .day-progress, button.day.selected .day-progress {
+    font-size: 12px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .8);
+}
 entry { background: #0d1820; color: #e6f1f5; border: 1px solid #304955; border-radius: 8px; padding: 10px; caret-color: #75deeb; }
 entry:focus { border-color: #65d4e4; }
 combobox button { background: #14242e; }
@@ -43,3 +49,22 @@ progressbar progress { background: linear-gradient(to right, #58bccc, #92dfc0); 
 scrolledwindow { border: none; }
 scrollbar { background: transparent; }
 scrollbar slider { background: #34515e; border-radius: 5px; min-width: 4px; }
+
+/* Keep interaction feedback subtle and quick. */
+button, entry, checkbutton check, list row {
+    transition: background-color 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out;
+}
+
+/* A brief glow confirms a completed task, then settles back into the theme. */
+@keyframes completion-glow {
+    0% { box-shadow: inset 0 0 0 1px alpha(#66d4df, 0); }
+    30% { box-shadow: inset 0 0 0 1px alpha(#66d4df, .85), 0 0 12px alpha(#66d4df, .25); }
+    100% { box-shadow: inset 0 0 0 1px alpha(#66d4df, 0); }
+}
+@keyframes completion-fade {
+    0% { opacity: 1; }
+    45% { opacity: .45; }
+    100% { opacity: 1; }
+}
+list row.completion-burst { animation: completion-glow 650ms ease-out; }
+.completion-text { animation: completion-fade 450ms ease-out; }
