@@ -1,0 +1,45 @@
+/* Robotics theme: graphite surfaces and restrained instrument colors. */
+window, dialog { background: #0c1319; color: #e2edf2; font-family: "Ubuntu", "Noto Sans", sans-serif; font-size: 12px; }
+headerbar { background: #111d25; color: #e2edf2; border: none; }
+.brand { font-size: 23px; font-weight: bold; color: #edf5f7; }
+.eyebrow { font-family: "Ubuntu Mono", monospace; font-size: 11px; font-weight: bold; color: #69cbd8; }
+.heading { font-size: 18px; font-weight: bold; color: #e2edf2; }
+.selected-date { font-size: 15px; font-weight: bold; }
+.muted { color: #91a7b3; font-size: 11px; }
+.clock { font-family: "Ubuntu Mono", monospace; color: #a5bac4; font-size: 12px; }
+.panel { background: #111c24; border: 1px solid #283a45; border-radius: 14px; padding: 14px; }
+button { background-image: none; background-color: #192934; color: #c9dce5; border: 1px solid #304753; border-radius: 8px; padding: 8px 10px; box-shadow: none; text-shadow: none; }
+button:hover { background-color: #233e4b; border-color: #55b9c9; color: #ecfbff; }
+button:active { background-color: #2c4e5a; }
+button:focus { outline-color: #68d6e5; outline-width: 2px; outline-offset: -3px; outline-style: solid; }
+button.primary { background-color: #66d4df; color: #08202a; border-color: #66d4df; font-weight: bold; }
+button.primary:hover { background-color: #91e6ee; }
+button.quiet-button { background: #14252f; padding: 5px 8px; font-size: 11px; color: #a9c8d5; }
+button.close-button { background: transparent; border-color: transparent; color: #8da6b3; }
+button.close-button:hover, button.delete-button:hover { background: #3c242b; color: #ffb1b5; border-color: #75444e; }
+button.day { background-color: #14232d; border: 1px solid #253943; border-radius: 9px; padding: 5px; }
+button.day.weekend { background-color: #122029; }
+button.day:hover { background-color: #1e3642; border-color: #568a9d; }
+.day-number { font-family: "Ubuntu Mono", monospace; font-size: 17px; font-weight: bold; color: #c4d8e3; }
+.day-summary { font-size: 10px; color: #8daab9; }
+button.day.today { border-color: #79d9b9; }
+button.day.today .day-number { color: #95edd0; }
+button.day.selected { background: #1a3c49; border-color: #65d4e4; }
+button.day.selected .day-number, button.day.selected .day-summary { color: #b3f1f5; }
+entry { background: #0d1820; color: #e6f1f5; border: 1px solid #304955; border-radius: 8px; padding: 10px; caret-color: #75deeb; }
+entry:focus { border-color: #65d4e4; }
+combobox button { background: #14242e; }
+menu { background: #172932; color: #e2edf2; border: 1px solid #355461; padding: 5px; }
+menuitem:hover { background: #254552; }
+list, list row { background: transparent; color: #e2edf2; }
+list row { margin-bottom: 7px; padding: 7px; border-radius: 9px; background: #182a35; border: 1px solid #263e4b; }
+list row:hover { background: #1b303d; }
+list row:only-child .empty-state { padding: 24px 0; }
+button.delete-button { background: transparent; border-color: transparent; padding: 5px; color: #819da9; }
+checkbutton check { background: #0d1820; border: 1px solid #527583; border-radius: 5px; min-width: 17px; min-height: 17px; }
+checkbutton check:checked { background: #8bdcbd; color: #0a2522; border-color: #8bdcbd; }
+progressbar trough { background: #233b47; border: none; border-radius: 4px; min-height: 5px; }
+progressbar progress { background: linear-gradient(to right, #58bccc, #92dfc0); border: none; border-radius: 4px; min-height: 5px; }
+scrolledwindow { border: none; }
+scrollbar { background: transparent; }
+scrollbar slider { background: #34515e; border-radius: 5px; min-width: 4px; }

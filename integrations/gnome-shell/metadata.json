@@ -1,0 +1,7 @@
+{
+  "uuid": "daily-todo-desktop@local",
+  "name": "Daily To-do Desktop",
+  "description": "Keep Daily To-do above desktop icons and behind application windows, without blocking input.",
+  "shell-version": ["46"],
+  "version": 1
+}

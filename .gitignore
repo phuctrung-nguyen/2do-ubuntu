@@ -1,0 +1,29 @@
+# Python cache and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Local tooling and credentials
+.agents/
+.codex/
+.aws/
+.env
+.env.*
+!.env.example
+
+# Generated previews, logs and crash dumps
+artifacts/
+*.log
+core
+core.*
+
+# Build and editor files
+build/
+dist/
+*.egg-info/
+.idea/
+.vscode/
+*.swp
+.DS_Store
